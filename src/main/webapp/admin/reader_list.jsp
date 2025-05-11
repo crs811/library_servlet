@@ -1,0 +1,139 @@
+<%@ page import="com.crs811.library.entity.User" %><%--
+  Created by IntelliJ IDEA.
+  User: CRS
+  Date: 6/4/2025
+  Time: 18:53
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false"%>
+<%@ page import="com.crs811.library.entity.User" %>
+<%@ page import="java.util.Objects" %>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <%@ include file="../common/header.jsp"%>
+</head>
+
+<body>
+<!--页面loading-->
+<div id="lyear-preloader" class="loading">
+    <div class="ctn-preloader">
+        <div class="round_spinner">
+            <div class="spinner"></div>
+            <img src="../static/LightYearAdmin/images/loading-logo.png" alt="">
+        </div>
+    </div>
+</div>
+<!--页面loading end-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <%@ include file="../common/left.jsp" %>
+
+        <!--头部信息-->
+        <%@ include file="../common/top.jsp" %>
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid p-t-15">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-toolbar d-flex flex-column flex-md-row">
+                                <div class="toolbar-btn-action">
+                                    <a class="btn btn-primary m-r-5" href="${pageContext.request.contextPath}/user_register.jsp"><i class="mdi mdi-plus"></i> 新增</a>
+                                    <a class="btn btn-success m-r-5 ajax-post confirm" href="http://www.lyear.com/doc_test.php" target-form="ids"><i class="mdi mdi-check"></i> 启用</a>
+                                    <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i> 禁用</a>
+                                    <a class="btn btn-danger" href="#!"><i class="mdi mdi-window-close"></i> 删除</a>
+                                </div>
+
+                                <form class="search-bar ml-md-auto" method="post" action="${pageContext.request.contextPath}/user?method=readerSearch" role="form">
+                                    <div class="input-group ml-md-auto">
+                                        <input type="text" class="form-control" name="search_nickname" placeholder="请输入姓名">&nbsp;
+                                        <button class="btn btn-label btn-success btn-sm" type="submit"><label><i class="mdi mdi-account-search"></i></label> 搜索</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="check-all">
+                                                    <label class="custom-control-label" for="check-all"></label>
+                                                </div>
+                                            </th>
+                                            <th>用户名</th>
+                                            <th style="width: 100%">姓名</th>
+                                            <th>电话</th>
+                                            <th>邮箱</th>
+                                            <th>状态</th>
+                                            <th style="text-align: center">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach var="R" items="${readerList}"  >
+                                            <tr>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input ids" name="ids[]" value="${R.id}" id="ids-1" name="id">
+                                                        <label class="custom-control-label" for="ids-1"></label>
+                                                    </div>
+                                                </td>
+                                                <td>${R.username}</td>
+                                                <td>${R.nickname}</td>
+                                                <td>${R.telephone}</td>
+                                                <td>${R.email}</td>
+                                                <td>
+                                                    <c:if test="${R.status == 0}">
+                                                        <span class="badge badge-success">正常</span>
+                                                    </c:if>
+                                                    <c:if test="${R.status == 1}">
+                                                        <span class="badge badge-danger">禁用</span>
+                                                    </c:if>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <a class="btn btn-xs btn-default" href="${pageContext.request.contextPath}/admin/user_edit.jsp?id=${R.id}"
+                                                           title="" data-toggle="tooltip" data-original-title="编辑"><i class="mdi mdi-pencil"></i></a>
+                                                        <a class="btn btn-xs btn-default ajax-get confirm" href="${pageContext.request.contextPath}/user?method=deleteById&id=${R.id}&type=1"
+                                                           onclick="return confirm('确认删除 ${R.nickname} 吗？');"  title="" data-toggle="tooltip" data-original-title="删除">
+                                                            <i class="mdi mdi-window-close"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="btn-group">
+                                                        <div class="btn-group">
+                                                            <a class="btn btn-purple btn-xs" href="borrow?method=borrowDetailSearch&readerID=${R.id}" title="查询借阅记录" >借阅记录</a>&nbsp;
+                                                            <a class="btn btn-pink btn-xs" href="borrow?method=borrowDetailSearch&readerID=${R.id}&isNull=T" title="查询未归还记录">未归还</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- 分页内容 -->
+                                <%@include file="../common/pagination.jsp" %>
+                                <!-- 分页内容结束 -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+    </div>
+</div>
+</body>
+</html>
