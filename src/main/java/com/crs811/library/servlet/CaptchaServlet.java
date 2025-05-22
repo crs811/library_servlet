@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 @WebServlet("/captcha")
-public class captchaServlet extends HttpServlet {
+public class CaptchaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // Generate a new captcha image and store it in the session
